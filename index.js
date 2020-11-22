@@ -3,6 +3,7 @@ class App {
     constructor() {
         this.allColumns = [];
         this.isSorting = false;
+        this.isRunning = false;
         this.speed = 50;
     }
 
@@ -36,39 +37,45 @@ class App {
     }
     
     async sortAnimated() {
-        var n = this.allColumns.length;
-        var swapped = true;
-        var x = -1;
-    
-        this.isSorting = true;
+        if (!this.isRunning) {
+            var n = this.allColumns.length;
+            var swapped = true;
+            var x = -1;
+        
+            this.isSorting = true;
+            this.isRunning = true;
 
-        while (swapped && this.isSorting) {
-            swapped = false;
-            x += 1;
-            var max = 0;
-            for (let i = 1; i < n-x; i++) {
-                if (this.allColumns[i-1].height > this.allColumns[i].height) {
-                    this.allColumns[i].setBackgroundColor("red");
-                    this.allColumns[i-1].setBackgroundColor("red");
+            while (swapped && this.isSorting) {
+                swapped = false;
+                x += 1;
+                var max = 0;
+                for (let i = 1; i < n-x; i++) {
+                    if (this.allColumns[i-1].height > this.allColumns[i].height) {
+                        this.allColumns[i].setBackgroundColor("red");
+                        this.allColumns[i-1].setBackgroundColor("red");
+                        this.draw();
+                        await sleep(200 - (this.speed * 2));
+                        const holder = this.allColumns[i];
+                        this.allColumns[i] = this.allColumns[i-1];
+                        this.allColumns[i-1] = holder;
+                        swapped = true;
+                    }
+                    this.allColumns[i-1].setBackgroundColor("blue");
                     this.draw();
-                    await sleep(200 - (this.speed * 2));
-                    const holder = this.allColumns[i];
-                    this.allColumns[i] = this.allColumns[i-1];
-                    this.allColumns[i-1] = holder;
-                    swapped = true;
+                    max = i;
                 }
-                this.allColumns[i-1].setBackgroundColor("blue");
-                this.draw();
-                max = i;
+                this.allColumns[max].setBackgroundColor("blue");
             }
-            this.allColumns[max].setBackgroundColor("blue");
+            if (!swapped)
+                this.showCompletedAnimation();
+            this.isSorting = false;
+            this.isRunning = false;
         }
-        this.showCompletedAnimation();
-        this.isSorting = false;
     }
 
     reset() {
         this.isSorting = false;
+        this.isRunning = false;
         this.allColumns = [];
         this.draw();
     }
@@ -78,7 +85,8 @@ class App {
     }
 
     continue() {
-        this.sortAnimated();
+        if (!this.isSorting)
+            this.sortAnimated();
     }
 }
 
