@@ -1,0 +1,37 @@
+.bubble-sort {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.all-columns {
+    display: flex;
+    height: 420px;
+    width: 80%;
+    box-shadow: 0 0 30px rgba(150, 150, 150, 1);
+    margin-bottom: 30px;
+    margin-top: 20px;
+    border: 1px solid rgba(150, 150, 150, 0.7);
+}
+
+.column {
+    width: 10px;
+    margin-left: 5px;
+    background-color: blue;
+}
+
+.btn {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 100px;
+    height: 50px;
+}
+
+.btns, .switches {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
